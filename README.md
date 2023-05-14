@@ -17,10 +17,10 @@ samples, guidance on mobile development, and a full API reference.
 <p>
   <img src="https://github.com/userravina/Media_Booster/assets/120082785/3a5732cd-5979-44e0-b693-5e28b58d931c" height="50%" width="30%">
   <img src="https://github.com/userravina/Media_Booster/assets/120082785/d89749bf-4a98-484f-8f7d-eb70df301ed5"  height="50%" width="30%">
-  <img src="https://github.com/userravina/Media_Booster/assets/120082785/a367e55b-1d1d-41e8-8f6c-2c421b731b02" height="50%" width="40%">
-  <img src="https://github.com/userravina/Media_Booster/assets/120082785/03d16549-43d1-433b-8e0c-88421869f7c1"  height="50%" width="40%">
-  <img src="https://github.com/userravina/Media_Booster/assets/120082785/04ee3303-2460-4e65-b026-d1f67453ed12"  height="50%" width="40%">l̥
-  <img src="https://github.com/userravina/Media_Booster/assets/120082785/b6468e19-42b7-40b9-84a6-48a59cab62ad" height="50%" width="40%">
+  <img src="https://github.com/userravina/Media_Booster/assets/120082785/a367e55b-1d1d-41e8-8f6c-2c421b731b02" height="50%" width="30%">
+  <img src="https://github.com/userravina/Media_Booster/assets/120082785/03d16549-43d1-433b-8e0c-88421869f7c1"  height="50%" width="30%">
+  <img src="https://github.com/userravina/Media_Booster/assets/120082785/04ee3303-2460-4e65-b026-d1f67453ed12"  height="50%" width="30%">l̥
+  <img src="https://github.com/userravina/Media_Booster/assets/120082785/b6468e19-42b7-40b9-84a6-48a59cab62ad" height="50%" width="30%">
   <img src="https://github.com/userravina/Media_Booster/assets/120082785/7a3fd27a-4fc6-451f-b8c7-eb5e39ff0a19"  height="50%" width="40%">
   <img src="https://github.com/userravina/Media_Booster/assets/120082785/cd3e5506-28ca-4252-bc40-f7e2759136af" height="50%" width="40%">
   <img src="https://github.com/userravina/Media_Booster/assets/120082785/2573a684-8a18-43fd-bdda-806961d01b7e"  height="50%" width="40%">
