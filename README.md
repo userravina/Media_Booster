@@ -1,4 +1,4 @@
-# spotify_app
+# Media_Booster
 
 A new Flutter project.
 
