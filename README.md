@@ -31,6 +31,7 @@ samples, guidance on mobile development, and a full API reference.
    <img src="https://github.com/userravina/Media_Booster/assets/120082785/81938c32-607c-4905-981c-2dd636a4b389"  height="50%" width="30%">
   <img src="https://github.com/userravina/Media_Booster/assets/120082785/5f8c4af5-98c3-472c-b41f-3ace0ed03307" height="50%" width="30%">
   <img src="https://github.com/userravina/Media_Booster/assets/120082785/55fc1cb7-7311-42f2-93ab-c93d3ef32ebf"  height="50%" width="30%">
+   <img src="https://github.com/userravina/Media_Booster/assets/120082785/b82954e9-49dc-484f-9fa6-6c548e453d3e"  height="50%" width="30%">
   <img src="https://github.com/userravina/Media_Booster/assets/120082785/0a565d81-af46-4760-be21-32d57767c928"  height="50%" width="30%">
   
 <video src = "" height="1150px" width="351px">
@@ -41,9 +42,6 @@ samples, guidance on mobile development, and a full API reference.
 
 
 
-
-
-![Screenshot_20230516-224413 1 _iphone13promaxgold_portrait](https://github.com/userravina/Media_Booster/assets/120082785/55fc1cb7-7311-42f2-93ab-c93d3ef32ebf)
 
 
 
