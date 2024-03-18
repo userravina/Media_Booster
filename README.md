@@ -2813,9 +2813,1295 @@ class _$VersionModelDao extends VersionModelDao {
   }
 }
 
+calculator
+
+name: gst_calculator
+description: "A new Flutter project."
+# The following line prevents the package from being accidentally published to
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+# The following defines the version and build number for your application.
+# A version number is three numbers separated by dots, like 1.2.43
+# followed by an optional build number separated by a +.
+# Both the version and the builder number may be overridden in flutter
+# build by specifying --build-name and --build-number, respectively.
+# In Android, build-name is used as versionName while build-number used as versionCode.
+# Read more about Android versioning at https://developer.android.com/studio/publish/versioning
+# In iOS, build-name is used as CFBundleShortVersionString while build-number is used as CFBundleVersion.
+# Read more about iOS versioning at
+# https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
+# In Windows, build-name is used as the major, minor, and patch parts
+# of the product and file versions while build-number is used as the build suffix.
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+# Dependencies specify other packages that your package needs in order to work.
+# To automatically upgrade your package dependencies to the latest versions
+# consider running `flutter pub upgrade --major-versions`. Alternatively,
+# dependencies can be manually updated by changing the version numbers below to
+# the latest version available on pub.dev. To see which dependencies have newer
+# versions available, run `flutter pub outdated`.
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  cupertino_icons: ^1.0.6
+  get: ^4.6.6
+  sizer: ^2.0.15
+  language_picker: ^0.4.3
+  intl: any
+  shared_preferences: ^2.0.13
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+
+  # The "flutter_lints" package below contains a set of recommended lints to
+  # encourage good coding practices. The lint set provided by the package is
+  # activated in the `analysis_options.yaml` file located at the root of your
+  # package. See that file for information about deactivating specific lint
+  # rules and activating additional ones.
+  flutter_lints: ^3.0.0
+
+# For information on the generic Dart part of this file, see the
+# following page: https://dart.dev/tools/pub/pubspec
+
+# The following section is specific to Flutter packages.
+flutter:
+
+  generate: true
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+
+  # To add assets to your application, add an assets section, like this:
+  # assets:
+  #   - images/a_dot_burr.jpeg
+  #   - images/a_dot_ham.jpeg
+  assets:
+    - assets/images/
+
+  # An image asset can refer to one or more resolution-specific "variants", see
+  # https://flutter.dev/assets-and-images/#resolution-aware
+
+  # For details regarding adding assets from package dependencies, see
+  # https://flutter.dev/assets-and-images/#from-packages
+
+  # To add custom fonts to your application, add a fonts section here,
+  # in this "flutter" section. Each entry in this list should have a
+  # "family" key with the font family name, and a "fonts" key with a
+  # list giving the asset and other descriptors for the font. For
+  # example:
+  # fonts:
+  #   - family: Schyler
+  #     fonts:
+  #       - asset: fonts/Schyler-Regular.ttf
+  #       - asset: fonts/Schyler-Italic.ttf
+  #         style: italic
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: fonts/TrajanPro.ttf
+  #       - asset: fonts/TrajanPro_Bold.ttf
+  #         weight: 700
+  #
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/custom-fonts/#from-packages
+
+
+main
+
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:gst_calculator/calculator/view/calculator_home.dart';
+import 'package:sizer/sizer.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import 'class/language_constants.dart';
+
+void main() {
+  runApp(
+  MyApp()
+  );
+}
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+  static void setLocale(BuildContext context, Locale newLocale) {
+    _MyAppState? state = context.findAncestorStateOfType<_MyAppState>();
+    state?.setLocale(newLocale);
+  }
+}
+
+class _MyAppState extends State<MyApp> {
+  Locale? _locale;
+
+  setLocale(Locale locale) {
+    setState(() {
+      _locale = locale;
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    getLocale().then((locale) => {setLocale(locale)});
+    super.didChangeDependencies();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Sizer(
+      builder: (context, orientation, deviceType) => GetMaterialApp(
+        supportedLocales: AppLocalizations.supportedLocales,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData.light(
+          useMaterial3: true,
+        ),
+        darkTheme: ThemeData.dark(
+          useMaterial3: true,
+        ),
+        locale: _locale,
+        routes: {
+          '/': (p0) => Calculator_Home(),
+        },
+      ),
+    );
+  }
+}
+
+
+arb-dir: lib/l10n
+template-arb-file: intl_en.arb
+output-localization-file: app_localizations.dart
+
+class Language_Calss {
+  final int id;
+  final String flag;
+  final String name;
+  final String languageCode;
+
+  Language_Calss(this.id, this.flag, this.name, this.languageCode);
+
+  static List<Language_Calss> languageList() {
+    return <Language_Calss>[
+      Language_Calss(1, "🇮🇳", "ગુજરાતી", "gu"),
+      Language_Calss(2, "🇺🇸", "English", "en"),
+      Language_Calss(3, "🇸🇦", "اَلْعَرَبِيَّةُ", "ar"),
+      Language_Calss(4, "🇮🇳", "हिंदी", "hi")
+    ];
+  }
+}
+
+import 'package:flutter/material.dart' show BuildContext, Locale;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart' show AppLocalizations;
+import 'package:shared_preferences/shared_preferences.dart';
+
+const String LAGUAGE_CODE = 'languageCode';
+
+//languages code
+const String ENGLISH = 'en';
+const String GUJRATI = 'gu';
+const String ARABIC = 'ar';
+const String HINDI = 'hi';
+
+Future<Locale> setLocale(String languageCode) async {
+  SharedPreferences _prefs = await SharedPreferences.getInstance();
+  await _prefs.setString(LAGUAGE_CODE, languageCode);
+  return _locale(languageCode);
+}
+
+Future<Locale> getLocale() async {
+  SharedPreferences _prefs = await SharedPreferences.getInstance();
+  String languageCode = _prefs.getString(LAGUAGE_CODE) ?? ENGLISH;
+  return _locale(languageCode);
+}
+
+
+Locale _locale(String languageCode) {
+  switch (languageCode) {
+    case ENGLISH:
+      return const Locale(ENGLISH, '');
+    case GUJRATI:
+      return const Locale(GUJRATI, "gu");
+    case ARABIC:
+      return const Locale(ARABIC, "");
+    case HINDI:
+      return const Locale(HINDI, "");
+    default:
+      return const Locale(ENGLISH, '');
+  }
+}
+
+extension Localization on BuildContext{
+  AppLocalizations get loc => AppLocalizations.of(this)!;
+}
+
+controller
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+class Calculator_Controller extends GetxController {
+  RxBool dark = false.obs;
+  RxBool buttonEfact = false.obs;
+
+  void toggleTheme(value) {
+    dark.value = value;
+    updateTheme();
+  }
+
+  void updateTheme() {
+    Get.changeThemeMode(dark.value ? ThemeMode.dark : ThemeMode.light);
+  }
+
+  void buttonEfect()
+  {
+    buttonEfact.value = true;
+    update();
+  }
+}
+
+
+{
+    "my_title": "My title goes here (AR)",
+
+    "zero1": "٠٠",
+    "zero":  "٠",
+    "one":   "١",
+    "two":   "٢",
+    "three": "٣",
+    "four":  "٤",
+    "five":  "٥",
+    "six":   "٦",
+    "seven": "٧",
+    "eight": "٨",
+    "nine":  "٩",
+
+    "start_typing_your_note": "Skriv din antäckning här",
+    "delete_note_prompt": "Are du säker på att du vill radera den här antäckningen?",
+    "cannot_share_empty_note_prompt": "Kan inte dela en tom antäckning!",
+    "generic_error_prompt": "Ett fel har inträffats",
+    "logout_dialog_prompt": "Är du säker på att du vill logga ut?",
+
+    "password_reset": "Nollställ ditt lösenord",
+    "password_reset_dialog_prompt": "Vi har nu skickat ett mejl till dig. Mejlet innehåller instruktioner på hur du kan nollställa ditt lösenord!",
+
+    "login_error_cannot_find_user": "Kunde inte hitta en användare med de angivna uppgifter!",
+    "login_error_wrong_credentials": "Fel inloggnings uppgifter!",
+    "login_error_auth_error": "Ett autentiseringsfel har inträffats!",
+
+    "login_view_prompt": "Logga in för att kunna se dina antäckningar!",
+
+    "login_view_forgot_password": "Glömt lösenord?",
+    "login_view_not_registered_yet": "Har inte registrerar än? Tryck här!",
+
+    "email_text_field_placeholder": "Skriv ditt mejladdress här",
+    "password_text_field_placeholder": "Skriv ditt lösenord här",
+
+    "forgot_password": "Glömt Lösenord",
+    "forgot_password_view_generic_error": "Vi kunde inte hantera din begäran. Var vänlig och skriv ditt inloggningsuppgifter och prova igen!",
+    "forgot_password_view_prompt": "Om du har glömt ditt lösenord, mata in ditt mejladdress så kan vi skicka ett mejl till dig där du kan nollställa ditt lösenord!",
+    "forgot_password_view_send_me_link": "Skicka mejlet",
+    "forgot_password_view_back_to_login": "Tillbaka till loginskärmen",
+
+    "register_error_weak_password": "Ditt valda lösenord är inte säkert nog. Var vänlig och välj ett annat lösenord!",
+    "register_error_email_already_in_use": "Mejladdresset som du angav är redan taget. Var vänlig och välj ett annat mejladdress!",
+    "register_error_generic": "Kunde tyvärr inte hantera din begäran. Var vänlig försök igen senare.",
+    "register_error_invalid_email": "Ditt valda mejladdress verkar inte vara giltigt. Var vänlig försök med ett annat mejladdress.",
+    "register_view_prompt": "Mata in ditt mejladdress och ditt lösenord för att se dina antäckningar!",
+    "register_view_already_registered": "Redan registrerat? Logga in här!",
+
+    "verify_email_view_prompt": "Vi har skickat ett mejl till ditt mejladdress. Du behöver trycka på länken i mejlet för att verifiera ditt mejladdress. Om du inte har redan fått mejlet efter en stund, tryck på knappen nedan för att skicka ett till mejl!",
+    "verify_email_send_email_verification": "Skicka verifieringsmejlet igen",
+
+    "notes_title": "{count, plural, =0{Inga antäckningar än} =1{1 antäckning} other{{count} antäckningar}}",
+    "@notes_title": {
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "3 antäckningar"
+            }
+        }
+    }
+}
+
+{
+    "my_title": "My title goes here (ENG) ",
+
+    "logout_button": "Log out",
+    "zero1": "00",
+    "zero": "0",
+    "one": "1",
+    "two": "2",
+    "three": "3",
+    "four": "4",
+    "five": "5",
+    "six": "6",
+    "seven": "7",
+    "eight": "8",
+    "nine": "9",
+
+    "notes_title": "{count, plural, =0{No notes yet} =1{1 note} other{{count} notes}}",
+    "@notes_title": {
+        "placeholders": {
+            "count": {
+                "type": "int",
+                "example": "3 notes"
+            }
+        }
+    }
+
+}
+
+{
+    "my_title": "My title goes here (GU) ",
+
+    "zero1": "૦૦",
+    "zero": "૦",
+    "one": "૧",
+    "two": "૨",
+    "three": "૩",
+    "four": "૪",
+    "five": "૫",
+    "six": "૬",
+    "seven": "૭",
+    "eight": "૮",
+    "nine": "૯",
+
+    "notes_title": "{count, plural, =0{હજી કોઈ નોંધો નથી} =1{1 નોંધો} other{{count} નોંધો}}",
+        "@notes_title": {
+            "placeholders": {
+                "count": {
+                    "type": "int",
+                    "example": "૩ નોંધો"
+                }
+            }
+        }
+}
+
+{
+    "my_title": "My title goes here (HI) ",
+
+     "zero1": "૦૦",
+     "zero":  "०",
+     "one":   "१",
+     "two":   "२",
+     "three": "३",
+     "four":  "४",
+     "five":  "५",
+     "six":   "६",
+     "seven": "७",
+     "eight": "८",
+     "nine":  "९",
+    "notes_title": "{count, plural, =0{अभी तक कोई नोट्स नहीं हैं} =1{1 नोट} other{{count} नोट्स}}",
+        "@notes_title": {
+            "placeholders": {
+                "count": {
+                    "type": "int",
+                    "example": "૩"
+                }
+            }
+        }
+}
 
 
 
+
+import 'dart:ui';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
+import 'package:gst_calculator/calculator/controller/calculator_controller.dart';
+import 'package:gst_calculator/class/language.dart';
+import 'package:gst_calculator/main.dart';
+import 'package:language_picker/language_picker_dropdown.dart';
+import 'package:language_picker/languages.dart';
+import 'package:sizer/sizer.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../../class/language_constants.dart';
+
+class Calculator_Home extends StatefulWidget {
+  const Calculator_Home({super.key});
+
+  @override
+  State<Calculator_Home> createState() => _Calculator_HomeState();
+}
+
+class _Calculator_HomeState extends State<Calculator_Home> {
+  Calculator_Controller controller = Get.put(Calculator_Controller());
+  Language? _selectedDropdownLanguage;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: controller.dark.value ? Colors.white : Colors.white,
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(7.6.h),
+          child: AppBar(
+            backgroundColor:
+                controller.dark.value ? Colors.black : Color(0xffE7E7E7),
+            leading: Builder(
+              builder: (context) {
+                return IconButton(
+                    onPressed: () {
+                      Scaffold.of(context).openDrawer();
+                    },
+                    tooltip:
+                        MaterialLocalizations.of(context).openAppDrawerTooltip,
+                    icon: Icon(Icons.menu));
+              },
+            ),
+            centerTitle: true,
+            title: controller.dark.value
+                ? Container(
+                    height: 5.2.h,
+                    width: 35.w,
+                    color: Colors.black,
+                    child: Row(
+                      children: [
+                        Spacer(),
+                        Image.asset(
+                          "assets/images/more.png",
+                          height: 3.h,
+                          width: 10.w,
+                        ),
+                        Spacer(),
+                        Text(
+                          "More Tools",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 17,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 0.5),
+                        ),
+                      ],
+                    ),
+                  )
+                : Container(
+                    height: 5.2.h,
+                    width: 35.w,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(30)),
+                    child: Row(
+                      children: [
+                        Spacer(),
+                        Container(
+                          height: 3.5.h,
+                          width: 7.w,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              color: Colors.white,
+                              border: Border.all(color: Colors.blueAccent)),
+                          child: Icon(
+                            Icons.add,
+                            size: 18,
+                          ),
+                        ),
+                        Spacer(),
+                        Text(
+                          "More Tools",
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 0.5),
+                        ),
+                        Spacer(),
+                      ],
+                    ),
+                  ),
+            actions: [
+              controller.dark.value
+                  ? Text("")
+                  : Image.asset(
+                      "assets/images/game_icon.png",
+                      height: 4.h,
+                    ),
+              Image.asset(
+                "assets/images/queen.png",
+                height: 7.h,
+              )
+            ],
+          ),
+        ),
+        drawer: Drawer(
+          backgroundColor: controller.dark.value ? Colors.black : Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "GST OPTION",
+                  style: TextStyle(
+                    color: controller.dark.value
+                        ? Colors.grey.shade300
+                        : Colors.grey.shade900,
+                  ),
+                ),
+                SizedBox(
+                  height: 3.h,
+                ),
+                Row(
+                  children: [
+                    Container(
+                      height: 6.h,
+                      width: 75.w,
+                      decoration: BoxDecoration(
+                        color: controller.dark.value
+                            ? Colors.white38
+                            : Colors.grey.shade300,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: 3.w,
+                          ),
+                          SizedBox(
+                            height: 4.h,
+                            child: ClipRect(
+                              child: Image.asset("assets/images/tools.png"),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 3.w,
+                          ),
+                          Text(
+                            "More Tools",
+                            style: TextStyle(
+                              color: controller.dark.value
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 2.h,
+                ),
+                Row(
+                  children: [
+                    Container(
+                      height: 6.h,
+                      width: 75.w,
+                      decoration: BoxDecoration(
+                        color: controller.dark.value
+                            ? Colors.white38
+                            : Colors.grey.shade300,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: 3.w,
+                          ),
+                          SizedBox(
+                            height: 4.h,
+                            child: ClipRect(
+                              child: Image.asset(
+                                "assets/images/dark.png",
+                                color: controller.dark.value
+                                    ? Colors.white
+                                    : Colors.black,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 3.w,
+                          ),
+                          Text(
+                            "Dark Theme",
+                            style: TextStyle(
+                              color: controller.dark.value
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
+                          ),
+                          Spacer(),
+                          Switch(
+                            value: controller.dark.value,
+                            onChanged: (value) {
+                              controller.toggleTheme(value);
+                            },
+                          ),
+                          SizedBox(
+                            width: 2.w,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 3.h,
+                ),
+                Row(
+                  children: [
+                    Container(
+                      height: 6.h,
+                      width: 75.w,
+                      decoration: BoxDecoration(
+                        color: controller.dark.value
+                            ? Colors.white38
+                            : Colors.grey.shade300,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: 3.w,
+                          ),
+                          InkWell(
+                            onTap: () {
+                              Get.back();
+                              showModalBottomSheet(
+                                backgroundColor: Colors.white10,
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return BottomSheet(
+                                    backgroundColor: Colors.black.withOpacity(0.8),
+                                    builder: (BuildContext context) {
+                                      return BackdropFilter(
+                                        filter: ImageFilter.blur(
+                                            sigmaX: 5.0, sigmaY: 5.0),
+                                        child: Container(
+                                          height: 52.h,
+                                          decoration: BoxDecoration(
+                                            color: Colors.black.withOpacity(0.5),
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(20),
+                                              topRight: Radius.circular(20),
+                                            ),
+                                          ),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.end,
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsets.only(
+                                                    top: 15, bottom: 15, right: 30),
+                                                child: InkWell(
+                                                  onTap: () {
+                                                    Navigator.pop(context);
+                                                  },
+                                                  child: Container(
+                                                    height: 4.h,
+                                                    width: 8.7.w,
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.black
+                                                          .withOpacity(0.2),
+                                                      borderRadius:
+                                                      BorderRadius.circular(20),
+                                                    ),
+                                                    child: Icon(
+                                                      Icons.close,
+                                                      color: Colors.white,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              Expanded(
+                                                child: GridView.builder(
+                                                  itemCount:
+                                                  Language_Calss.languageList().length,
+                                                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4, childAspectRatio: 1.0),
+                                                  itemBuilder: (context, index) {
+                                                    return Container(
+                                                      margin: EdgeInsets.symmetric(
+                                                          vertical: 5,
+                                                          horizontal: 5),
+                                                      decoration: BoxDecoration(border: Language_Calss ?Border.all(color: Colors.white):Border.all(),
+                                                          borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                          color: Colors.white
+                                                              .withOpacity(0.1)),
+                                                      child: Column(
+                                                        mainAxisAlignment: MainAxisAlignment.center,
+                                                        children: [
+                                                          InkWell(
+                                                            onTap: () async {
+                                                              Locale _locale =  await setLocale(Language_Calss.languageList()[index].languageCode);
+                                                              MyApp.setLocale(context, _locale);
+
+                                                              if("gu" == Language_Calss.languageList()[index].languageCode)
+                                                                {
+                                                                  Language_Calss(isselect: true,languageCode: Language_Calss.languageList()[index].languageCode,
+                                                                      name: Language_Calss.languageList()[index].name,flag:Language_Calss.languageList()[index].flag ,
+                                                                      id:Language_Calss.languageList()[index].id );
+                                                                }
+
+                                                              Get.back();
+                                                            },
+                                                            child: Container(
+                                                              height: 40,
+                                                              width: 60,
+                                                              child: Center(
+                                                                child: Text(
+                                                                  "${Language_Calss.languageList()[index].flag}",
+                                                                  style: TextStyle(fontSize: 20),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Row(
+                                                            mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                            children: [
+                                                              Text(
+                                                                "${Language_Calss.languageList()[index].name}",
+                                                                style: TextStyle(
+                                                                  color:
+                                                                  Colors.white,
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    onClosing: () {
+                                      // Handle the closing of the bottom sheet
+                                    },
+                                  );
+                                },
+                              );
+                            },
+                            child: Container(
+                              height: 3.h,
+                              width: 10.w,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                              ),child: Icon(Icons.language),
+                            ),
+                          ),
+
+                          SizedBox(
+                            width: 3.w,
+                          ),
+                          Text(
+                            "Language",
+                            style: TextStyle(
+                              color: controller.dark.value
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 1.h,
+                ),
+              ],
+            ),
+          ),
+        ),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Container(
+              color: Colors.black,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Stack(
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            height: 7.h,
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                              color: Color(0xffE7E7E7),
+                            ),
+                            child: Row(
+                              children: [
+                                Image.asset(
+                                  "assets/images/ac.png",
+                                  height: 5.h,
+                                ),
+                                Image.asset(
+                                  "assets/images/undo.png",
+                                  height: 4.h,
+                                ),
+                                Spacer(),
+                                Image.asset(
+                                  "assets/images/delet.png",
+                                  height: 5.h,
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      InkWell(
+                        onTap: (){
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 43, left: 145),
+                          child: Container(
+                            height: 1.h,
+                            width: 20.w,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.grey.shade700),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      clickableContainer(
+                          onTap: () {},
+                          width: 20.w,
+                          height: 7.2.h,
+                          text: "+${context.loc.three}%",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 18),
+                          imagePath: "assets/images/btn1.png"),
+                      clickableContainer(
+                          onTap: () {},
+                          width: 20.w,
+                          height: 7.2.h,
+                          text: "+${context.loc.five}%",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 18),
+                          imagePath: "assets/images/btn1.png"),
+                      clickableContainer(
+                          onTap: () {},
+                          width: 20.w,
+                          height: 7.2.h,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 18),
+                          text: "+${context.loc.one}${context.loc.two}%",
+                          imagePath: "assets/images/btn1.png"),
+                      clickableContainer(
+                          onTap: () {},
+                          width: 20.w,
+                          height: 7.2.h,
+                          text: "+${context.loc.one}${context.loc.eight}%",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 18),
+                          imagePath: "assets/images/btn1.png"),
+                      clickableContainer(
+                          onTap: () {},
+                          width: 20.w,
+                          height: 7.2.h,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 18),
+                          text: "+GST",
+                          imagePath: "assets/images/btn1.png"),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      clickableContainer(
+                          onTap: () {},
+                          width: 20.w,
+                          height: 7.2.h,
+                          text: "-${context.loc.three}%",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 18),
+                          imagePath: "assets/images/btn1.png"),
+                      clickableContainer(
+                          onTap: () {},
+                          width: 20.w,
+                          height: 7.2.h,
+                          text: "-${context.loc.five}%",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 18),
+                          imagePath: "assets/images/btn1.png"),
+                      clickableContainer(
+                          onTap: () {},
+                          width: 20.w,
+                          height: 7.2.h,
+                          text: "-${context.loc.one}${context.loc.two}%",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 18),
+                          imagePath: "assets/images/btn1.png"),
+                      clickableContainer(
+                          onTap: () {},
+                          width: 20.w,
+                          height: 7.2.h,
+                          text: "-${context.loc.one}${context.loc.eight}%",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 18),
+                          imagePath: "assets/images/btn1.png"),
+                      clickableContainer(
+                          onTap: () {},
+                          width: 20.w,
+                          height: 7.2.h,
+                          text: "-GST",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 18),
+                          imagePath: "assets/images/btn1.png"),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      clickableContainer(
+                          onTap: () {},
+                          width: 20.w,
+                          height: 7.2.h,
+                          text: "GT",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 16),
+                          imagePath: "assets/images/btn2.png"),
+                      clickableContainer(
+                          onTap: () {},
+                          width: 20.w,
+                          height: 7.2.h,
+                          text: "√x",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 19),
+                          imagePath: "assets/images/btn2.png"),
+                      clickableContainer(
+                          onTap: () {},
+                          width: 20.w,
+                          height: 7.2.h,
+                          text: "%",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 20),
+                          imagePath: "assets/images/btn2.png"),
+                      clickableContainer(
+                          onTap: () {},
+                          width: 20.w,
+                          height: 7.2.h,
+                          text: "÷",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 24),
+                          imagePath: "assets/images/btn2.png"),
+                      clickableContainer(
+                          onTap: () {},
+                          width: 20.w,
+                          height: 7.2.h,
+                          text: "MR",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15),
+                          imagePath: "assets/images/btn2.png"),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      clickableContainer(
+                          onTap: () {},
+                          width: 20.w,
+                          height: 7.2.h,
+                          text: "${context.loc.seven}",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 23),
+                          imagePath: "assets/images/btn1.png"),
+                      clickableContainer(
+                          onTap: () {},
+                          width: 20.w,
+                          height: 7.2.h,
+                          text: "${context.loc.eight}",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 23),
+                          imagePath: "assets/images/btn1.png"),
+                      clickableContainer(
+                          onTap: () {},
+                          width: 20.w,
+                          height: 7.2.h,
+                          text: "${context.loc.nine}",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 23),
+                          imagePath: "assets/images/btn1.png"),
+                      clickableContainer(
+                          onTap: () {},
+                          width: 20.w,
+                          height: 7.2.h,
+                          text: "×",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 24),
+                          imagePath: "assets/images/btn2.png"),
+                      clickableContainer(
+                          onTap: () {},
+                          width: 20.w,
+                          height: 7.2.h,
+                          text: "MU",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15),
+                          imagePath: "assets/images/btn2.png"),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      clickableContainer(
+                          onTap: () {},
+                          width: 20.w,
+                          height: 7.2.h,
+                          text: "${context.loc.four}",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 23),
+                          imagePath: "assets/images/btn1.png"),
+                      clickableContainer(
+                          onTap: () {},
+                          width: 20.w,
+                          height: 7.2.h,
+                          text: "${context.loc.five}",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 23),
+                          imagePath: "assets/images/btn1.png"),
+                      clickableContainer(
+                          onTap: () {},
+                          width: 20.w,
+                          height: 7.2.h,
+                          text: "${context.loc.six}",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 23),
+                          imagePath: "assets/images/btn1.png"),
+                      clickableContainer(
+                          onTap: () {},
+                          width: 20.w,
+                          height: 7.2.h,
+                          text: "-",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 25),
+                          imagePath: "assets/images/btn2.png"),
+                      clickableContainer(
+                          onTap: () {},
+                          width: 20.w,
+                          height: 7.2.h,
+                          text: "M-",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 15),
+                          imagePath: "assets/images/btn2.png"),
+                    ],
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(
+                        children: [
+                          clickableContainer(
+                              onTap: () {},
+                              width: 20.w,
+                              height: 7.2.h,
+                              text: "${context.loc.one}",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 23),
+                              imagePath: "assets/images/btn1.png"),
+                          clickableContainer(
+                              onTap: () {},
+                              width: 20.w,
+                              height: 7.2.h,
+                              text: "${context.loc.zero}",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 23),
+                              imagePath: "assets/images/btn1.png"),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          clickableContainer(
+                              onTap: () {},
+                              width: 20.w,
+                              height: 7.2.h,
+                              text: "${context.loc.two}",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 23),
+                              imagePath: "assets/images/btn1.png"),
+                          clickableContainer(
+                              onTap: () {},
+                              width: 20.w,
+                              height: 7.2.h,
+                              text: "${context.loc.zero1}",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 23),
+                              imagePath: "assets/images/btn1.png"),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          clickableContainer(
+                              onTap: () {},
+                              width: 20.w,
+                              height: 7.2.h,
+                              text: "${context.loc.three}",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 23),
+                              imagePath: "assets/images/btn1.png"),
+                          clickableContainer(
+                              onTap: () {},
+                              width: 20.w,
+                              height: 7.2.h,
+                              text: ".",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 23),
+                              imagePath: "assets/images/btn1.png"),
+                        ],
+                      ),
+                      clickableContainer(
+                          onTap: () {},
+                          width: 20.w,
+                          height: 14.4.h,
+                          text: "+",
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500,
+                              fontSize: 25),
+                          imagePath: "assets/images/btn3.png"),
+                      Column(
+                        children: [
+                          clickableContainer(
+                              onTap: () {},
+                              width: 20.w,
+                              height: 7.2.h,
+                              text: "M+",
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 15),
+                              imagePath: "assets/images/btn2.png"),
+                          clickableContainer(
+                              onTap: () {},
+                              width: 20.w,
+                              height: 7.2.h,
+                              text: "=",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 20),
+                              imagePath: "assets/images/btn4.png"),
+                        ],
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget clickableContainer({
+    VoidCallback? onTap,
+    double? height,
+    double? width,
+    String? imagePath,
+    String? text,
+    TextStyle? style,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      onLongPress: () {},
+      child: Container(
+        height: height,
+        width: width,
+        decoration: BoxDecoration(
+          color: Colors.grey,
+          image: DecorationImage(
+            image: AssetImage(imagePath!),
+            fit: BoxFit.fill,
+          ),
+        ),
+        child: Center(
+          child: Text(
+            text!,
+            style: style,
+          ),
+        ),
+      ),
+    );
+  }
+}
 
 
 
