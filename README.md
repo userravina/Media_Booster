@@ -39,6 +39,1476 @@ samples, guidance on mobile development, and a full API reference.
 </p>
 
 
+
+import 'package:flutter/material.dart';
+
+class Bouncing extends StatefulWidget {
+  final Widget? child;
+  final VoidCallback? onPress;
+
+  Bouncing({@required this.child, Key? key, this.onPress})
+      : assert(child != null),
+        super(key: key);
+
+  @override
+  _BouncingState createState() => _BouncingState();
+}
+
+class _BouncingState extends State<Bouncing>
+    with SingleTickerProviderStateMixin {
+  double? _scale;
+  AnimationController? _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: Duration(microseconds: 100),
+      lowerBound: 0.0,
+      upperBound: 0.1,
+    );
+    _controller!.addListener(() {
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller!.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    _scale = 1 - _controller!.value;
+    return Listener(
+      onPointerDown: (PointerDownEvent event) {
+        if (widget.onPress != null) {
+          _controller!.forward();
+        }
+      },
+      onPointerUp: (PointerUpEvent event) {
+        if (widget.onPress != null) {
+          _controller!.reverse();
+          widget.onPress!();
+        }
+      },
+      child: Transform.scale(
+        scale: _scale!,
+        child: widget.child,
+      ),
+    );
+  }
+}
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:gst_calculator/calculator/view/calculator_home.dart';
+import 'package:sizer/sizer.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import 'calculator/controller/calculator_controller.dart';
+import 'class/language_constants.dart';
+
+void main() {
+  Get.put(Calculator_Controller());
+  runApp(
+  MyApp()
+  );
+}
+class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
+  @override
+  State<MyApp> createState() => _MyAppState();
+  static void setLocale(BuildContext context, Locale newLocale) {
+    _MyAppState? state = context.findAncestorStateOfType<_MyAppState>();
+    state?.setLocale(newLocale);
+  }
+}
+
+class _MyAppState extends State<MyApp> {
+  Locale? _locale;
+
+  setLocale(Locale locale) {
+    setState(() {
+      _locale = locale;
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    getLocale().then((locale) => {setLocale(locale)});
+    super.didChangeDependencies();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Sizer(
+      builder: (context, orientation, deviceType) => GetMaterialApp(
+        supportedLocales: AppLocalizations.supportedLocales,
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData.light(
+          useMaterial3: true,
+        ),
+        darkTheme: ThemeData.dark(
+          useMaterial3: true,
+        ),
+        locale: _locale,
+        routes: {
+          '/': (p0) => Calculator_Home(),
+        },
+      ),
+    );
+  }
+}
+
+
+class Language_Calss {
+  final int? id;
+  final String? flag;
+  final String? name;
+  final String? languageCode;
+
+  bool? isselect = false;
+  Language_Calss({ this.id,  this.flag,  this.name,  this.languageCode,  this.isselect});
+
+
+}
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_rx/get_rx.dart';
+
+import '../../class/language.dart';
+
+class Calculator_Controller extends GetxController {
+  RxBool dark = false.obs;
+  RxBool buttonEfact = false.obs;
+  RxString display="".obs;
+  RxString displayEnglish="".obs;
+  RxString displayOprater="".obs;
+  RxString prevOpertor="".obs;
+  RxList value =<String>[].obs;
+  RxList operator =[].obs;
+  RxDouble result = 0.0.obs;
+  RxDouble memory = 0.0.obs;
+  RxString mstore="".obs;
+  RxBool mr = false.obs;
+  RxList<Language_Calss> lang=<Language_Calss>[].obs;
+  void toggleTheme(value) {
+    dark.value = value;
+    updateTheme();
+  }
+
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+
+    lang.value=<Language_Calss>[
+      Language_Calss(id: 1, flag: "🇮🇳", name: "ગુજરાતી", languageCode: "gu",isselect: false),
+      Language_Calss(id: 2, flag: "🇺🇸", name: "English", languageCode: "en",isselect: false),
+      Language_Calss(id: 3, flag: "🇸🇦",name:  "اَلْعَرَبِيَّةُ", languageCode: "ar",isselect: false),
+      Language_Calss(id: 4, flag: "🇮🇳",name:  "हिंदी",languageCode:  "hi",isselect: false)
+    ];
+
+
+  }
+
+  void updateTheme() {
+    Get.changeThemeMode(dark.value ? ThemeMode.dark : ThemeMode.light);
+  }
+
+  void buttonEfect()
+  {
+    buttonEfact.value = true;
+    update();
+  }
+}
+import 'dart:math';
+import 'dart:ui';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:get/get.dart';
+import 'package:gst_calculator/calculator/controller/calculator_controller.dart';
+import 'package:gst_calculator/calculator/view/bouncing_button.dart';
+import 'package:gst_calculator/main.dart';
+import 'package:sizer/sizer.dart';
+import '../../class/language_constants.dart';
+
+class Calculator_Home extends StatefulWidget {
+  const Calculator_Home({super.key});
+
+  @override
+  State<Calculator_Home> createState() => _Calculator_HomeState();
+}
+
+class _Calculator_HomeState extends State<Calculator_Home> {
+  Calculator_Controller controller = Get.find();
+
+  onclick(String number, String click) {
+    switch (click) {
+      case ".":
+      case "0":
+      case "00":
+      case "1":
+      case "2":
+      case "3":
+      case "4":
+      case "5":
+      case "6":
+      case "7":
+      case "8":
+      case "9":
+
+        if(controller.mr.value)
+          {
+            controller.mstore.value = "";
+            controller.display.value = "";
+          }
+
+        controller.mr.value = false;
+
+        controller.display.value = controller.display.value + number;
+        controller.displayEnglish.value = controller.displayEnglish.value + click;
+
+        break;
+      case "AC":
+        controller.display.value = "";
+        controller.displayEnglish.value = "";
+        controller.value.clear();
+        controller.prevOpertor.value = "";
+        controller.memory.value = 0.0;
+        controller.result.value = 0.0;
+        controller.displayOprater.value = "";
+        controller.operator.clear();
+        break;
+      case "DE":
+        controller.display.value = controller.display.value
+            .substring(0, controller.display.value.length - 1);
+        controller.displayEnglish.value = controller.displayEnglish.value
+            .substring(0, controller.displayEnglish.value.length - 1);
+        break;
+
+      case "MR":
+        {
+          controller.mr.value = true;
+
+          controller.mstore.value = controller.displayEnglish.value;
+          break;
+        }
+      case "M-":
+        {
+          if (controller.memory.value != 0.0) {
+            print("aaaaaaaaaaaaaaa");
+            controller.displayEnglish.value =
+                "${double.parse(controller.displayEnglish.value) - (controller.memory.value)}";
+            controller.mstore.value =  controller.displayEnglish.value;
+            // controller.display.value = controller.displayEnglish.value.toString();
+          } else {
+            print("vvvvvvvvvvvvvvvvvvvv");
+            controller.memory.value +=  double.parse(controller.displayEnglish.value);
+            controller.displayEnglish.value += controller.memory.value.toString();
+            controller.display.value = controller.memory.value.toString();
+            controller.displayEnglish.value =  controller.memory.value.toString();
+          }
+          print(controller.displayEnglish.value);
+        }
+
+      case "M+":
+        {
+          if (controller.memory.value != 0.0) {
+            print("aaaaaaaaaaaaaaa");
+            controller.displayEnglish.value = "${double.parse(controller.displayEnglish.value) + (controller.memory.value)}";
+
+            // controller.display.value = controller.displayEnglish.value.toString();
+          } else {
+            print("vvvvvvvvvvvvvvvvvvvv");
+            controller.memory.value +=   double.parse(controller.displayEnglish.value);
+            controller.displayEnglish.value += controller.memory.value.toString();
+            controller.mstore.value = controller.memory.value.toString();
+            controller.displayEnglish.value = controller.memory.value.toString();
+          }
+          print(controller.displayEnglish.value);
+        }
+      case "%":
+        {
+          double currentValue = double.parse(controller.displayEnglish.value);
+          double percentage = currentValue / 100;
+
+          // Update the display and result
+          controller.display.value = percentage.toString();
+          controller.displayEnglish.value = percentage.toString();
+          controller.displayOprater.value = number;
+          controller.operator.add(controller.displayOprater.value);
+          controller.prevOpertor.value = "%";
+          break;
+        }
+      case "root":
+        {
+          double currentValue = double.parse(controller.displayEnglish.value);
+
+          if (currentValue >= 0) {
+            double squareRoot = sqrt(currentValue);
+
+            controller.display.value = squareRoot.toString();
+            controller.displayEnglish.value = squareRoot.toString();
+          } else {
+            controller.display.value = "Error";
+            controller.displayEnglish.value = "Error";
+          }
+          break;
+        }
+      case "/":
+        {
+          controller.value.add(controller.display.value);
+
+          print(controller.value);
+
+          controller.result.value +=
+              double.parse(controller.displayEnglish.value);
+
+          controller.display.value = "";
+          controller.displayEnglish.value = "";
+          controller.displayOprater.value = number;
+          controller.operator.add(controller.displayOprater.value);
+          controller.prevOpertor.value = "/";
+          print(controller.operator.value);
+          break;
+        }
+      case "*":
+        {
+          controller.value.add(controller.display.value);
+
+          print(controller.value);
+
+          controller.result.value +=
+              double.parse(controller.displayEnglish.value);
+
+          controller.display.value = "";
+          controller.displayEnglish.value = "";
+          controller.displayOprater.value = number;
+          controller.operator.add(controller.displayOprater.value);
+          controller.prevOpertor.value = "*";
+          print(controller.operator.value);
+          break;
+        }
+      case "-":
+        {
+          controller.value.add(controller.display.value);
+
+          print(controller.value);
+
+          controller.result.value +=
+              double.parse(controller.displayEnglish.value);
+
+          controller.display.value = "";
+          controller.displayEnglish.value = "";
+          controller.displayOprater.value = number;
+          controller.operator.add(controller.displayOprater.value);
+          controller.prevOpertor.value = "-";
+          print(controller.operator.value);
+          break;
+        }
+      case "+":
+        {
+          controller.value.add(controller.display.value);
+
+          print(controller.value);
+
+          controller.result.value +=
+              double.parse(controller.displayEnglish.value);
+
+          controller.display.value = "";
+          controller.displayEnglish.value = "";
+          controller.displayOprater.value = number;
+          controller.operator.add(controller.displayOprater.value);
+          controller.prevOpertor.value = "+";
+          print(controller.operator.value);
+          break;
+        }
+      case "=":
+        {
+          if (controller.prevOpertor.value == "+") {
+            controller.result.value +=
+                double.parse(controller.displayEnglish.value);
+          } else if (controller.prevOpertor.value == "-") {
+            controller.result.value -=
+                double.parse(controller.displayEnglish.value);
+          } else if (controller.prevOpertor.value == "*") {
+            controller.result.value *=
+                double.parse(controller.displayEnglish.value);
+          } else if (controller.prevOpertor.value == "/") {
+            controller.result.value /=
+                double.parse(controller.displayEnglish.value);
+          } else if (controller.prevOpertor.value == "%") {
+            controller.result.value =
+                double.parse(controller.displayEnglish.value);
+          }
+          controller.display.value = controller.result.value.toString();
+
+          break;
+        }
+    }
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: controller.dark.value ? Colors.white : Colors.white,
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(7.6.h),
+          child: AppBar(
+            backgroundColor:
+                controller.dark.value ? Colors.black : Color(0xffE7E7E7),
+            leading: Builder(
+              builder: (context) {
+                return IconButton(
+                    onPressed: () {
+                      Scaffold.of(context).openDrawer();
+                    },
+                    tooltip:
+                        MaterialLocalizations.of(context).openAppDrawerTooltip,
+                    icon: Icon(Icons.menu));
+              },
+            ),
+            centerTitle: true,
+            title: controller.dark.value
+                ? Container(
+                    height: 5.2.h,
+                    width: 35.w,
+                    color: Colors.black,
+                    child: Row(
+                      children: [
+                        Spacer(),
+                        Image.asset(
+                          "assets/images/more.png",
+                          height: 3.h,
+                          width: 10.w,
+                        ),
+                        Spacer(),
+                        Text(
+                          "More Tools",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 17,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 0.5),
+                        ),
+                      ],
+                    ),
+                  )
+                : Container(
+                    height: 5.2.h,
+                    width: 35.w,
+                    decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(30)),
+                    child: Row(
+                      children: [
+                        Spacer(),
+                        Container(
+                          height: 3.5.h,
+                          width: 7.w,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              color: Colors.white,
+                              border: Border.all(color: Colors.blueAccent)),
+                          child: Icon(
+                            Icons.add,
+                            size: 18,
+                          ),
+                        ),
+                        Spacer(),
+                        Text(
+                          "More Tools",
+                          style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w700,
+                              letterSpacing: 0.5),
+                        ),
+                        Spacer(),
+                      ],
+                    ),
+                  ),
+            actions: [
+              controller.dark.value
+                  ? Text("")
+                  : Image.asset(
+                      "assets/images/game_icon.png",
+                      height: 4.h,
+                    ),
+              Image.asset(
+                "assets/images/queen.png",
+                height: 7.h,
+              )
+            ],
+          ),
+        ),
+        drawer: Drawer(
+          backgroundColor: controller.dark.value ? Colors.black : Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "GST OPTION",
+                  style: TextStyle(
+                    color: controller.dark.value
+                        ? Colors.grey.shade300
+                        : Colors.grey.shade900,
+                  ),
+                ),
+                SizedBox(
+                  height: 3.h,
+                ),
+                Row(
+                  children: [
+                    Container(
+                      height: 6.h,
+                      width: 75.w,
+                      decoration: BoxDecoration(
+                        color: controller.dark.value
+                            ? Colors.white38
+                            : Colors.grey.shade300,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: 3.w,
+                          ),
+                          SizedBox(
+                            height: 4.h,
+                            child: ClipRect(
+                              child: Image.asset("assets/images/tools.png"),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 3.w,
+                          ),
+                          Text(
+                            "More Tools",
+                            style: TextStyle(
+                              color: controller.dark.value
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 2.h,
+                ),
+                Row(
+                  children: [
+                    Container(
+                      height: 6.h,
+                      width: 75.w,
+                      decoration: BoxDecoration(
+                        color: controller.dark.value
+                            ? Colors.white38
+                            : Colors.grey.shade300,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: 3.w,
+                          ),
+                          SizedBox(
+                            height: 4.h,
+                            child: ClipRect(
+                              child: Image.asset(
+                                "assets/images/dark.png",
+                                color: controller.dark.value
+                                    ? Colors.white
+                                    : Colors.black,
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 3.w,
+                          ),
+                          Text(
+                            "Dark Theme",
+                            style: TextStyle(
+                              color: controller.dark.value
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
+                          ),
+                          Spacer(),
+                          Switch(
+                            value: controller.dark.value,
+                            onChanged: (value) {
+                              controller.toggleTheme(value);
+                            },
+                          ),
+                          SizedBox(
+                            width: 2.w,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 3.h,
+                ),
+                Row(
+                  children: [
+                    Container(
+                      height: 6.h,
+                      width: 75.w,
+                      decoration: BoxDecoration(
+                        color: controller.dark.value
+                            ? Colors.white38
+                            : Colors.grey.shade300,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: InkWell(
+                        onTap: () {
+                          Get.back();
+                          showModalBottomSheet(
+                            backgroundColor: Colors.white10,
+                            context: context,
+                            builder: (BuildContext context) {
+                              return BottomSheet(
+                                backgroundColor: Colors.black.withOpacity(0.8),
+                                builder: (BuildContext context) {
+                                  return BackdropFilter(
+                                      filter: ImageFilter.blur(
+                                          sigmaX: 5.0, sigmaY: 5.0),
+                                      child: LenguageSelectionBottomSheet());
+                                },
+                                onClosing: () {
+                                  // Handle the closing of the bottom sheet
+                                },
+                              );
+                            },
+                          );
+                        },
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 3.w,
+                            ),
+                            Container(
+                              height: 3.h,
+                              width: 10.w,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Icon(Icons.language),
+                            ),
+                            SizedBox(
+                              width: 3.w,
+                            ),
+                            Text(
+                              "Language",
+                              style: TextStyle(
+                                color: controller.dark.value
+                                    ? Colors.white
+                                    : Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 1.h,
+                ),
+              ],
+            ),
+          ),
+        ),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Container(
+              color: Colors.black,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Stack(
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            height: 7.h,
+                            width: MediaQuery.of(context).size.width,
+                            decoration: BoxDecoration(
+                              color: Color(0xffE7E7E7),
+                            ),
+                            child: Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: () {
+                                    onclick("", "AC");
+                                    print("dwfwddeded");
+                                  },
+                                  child: Image.asset(
+                                    "assets/images/ac.png",
+                                    height: 5.h,
+                                  ),
+                                ),
+                                Image.asset(
+                                  "assets/images/undo.png",
+                                  height: 4.h,
+                                ),
+                                Spacer(),
+                                controller.mr.value ? Text(
+                                  "${controller.mstore.value}",
+                                  style: TextStyle(
+                                      fontSize: 20.sp,
+                                      fontWeight: FontWeight.w500),
+                                ):  Text(
+                                  "${controller.display}",
+                                  style: TextStyle(
+                                      fontSize: 20.sp,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                Text(
+                                  "${controller.displayOprater}",
+                                  style: TextStyle(
+                                      fontSize: 20.sp,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                SizedBox(
+                                  width: 1.w,
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    onclick("", "DE");
+                                  },
+                                  child: Image.asset(
+                                    "assets/images/delet.png",
+                                    height: 5.h,
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 43, left: 145),
+                        child: Container(
+                          height: 1.h,
+                          width: 20.w,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: Colors.grey.shade700),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Bouncing(
+                        onPress: () {},
+                        child: clickableContainer(
+                            onTap: () {},
+                            width: 20.w,
+                            height: 7.2.h,
+                            text: "+${context.loc.three}%",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 18),
+                            imagePath: "assets/images/btn1.png"),
+                      ),
+                      Bouncing(
+                        onPress: () {},
+                        child: clickableContainer(
+                            onTap: () {},
+                            width: 20.w,
+                            height: 7.2.h,
+                            text: "+${context.loc.five}%",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 18),
+                            imagePath: "assets/images/btn1.png"),
+                      ),
+                      Bouncing(
+                        onPress: () {},
+                        child: clickableContainer(
+                            onTap: () {},
+                            width: 20.w,
+                            height: 7.2.h,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 18),
+                            text: "+${context.loc.one}${context.loc.two}%",
+                            imagePath: "assets/images/btn1.png"),
+                      ),
+                      Bouncing(
+                        onPress: () {},
+                        child: clickableContainer(
+                            onTap: () {},
+                            width: 20.w,
+                            height: 7.2.h,
+                            text: "+${context.loc.one}${context.loc.eight}%",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 18),
+                            imagePath: "assets/images/btn1.png"),
+                      ),
+                      Bouncing(
+                        onPress: () {},
+                        child: clickableContainer(
+                            onTap: () {},
+                            width: 20.w,
+                            height: 7.2.h,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 18),
+                            text: "+GST",
+                            imagePath: "assets/images/btn1.png"),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Bouncing(
+                        onPress: () {},
+                        child: clickableContainer(
+                            onTap: () {},
+                            width: 20.w,
+                            height: 7.2.h,
+                            text: "-${context.loc.three}%",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 18),
+                            imagePath: "assets/images/btn1.png"),
+                      ),
+                      Bouncing(
+                        onPress: () {},
+                        child: clickableContainer(
+                            onTap: () {},
+                            width: 20.w,
+                            height: 7.2.h,
+                            text: "-${context.loc.five}%",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 18),
+                            imagePath: "assets/images/btn1.png"),
+                      ),
+                      Bouncing(
+                        onPress: () {},
+                        child: clickableContainer(
+                            onTap: () {},
+                            width: 20.w,
+                            height: 7.2.h,
+                            text: "-${context.loc.one}${context.loc.two}%",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 18),
+                            imagePath: "assets/images/btn1.png"),
+                      ),
+                      Bouncing(
+                        onPress: () {},
+                        child: clickableContainer(
+                            onTap: () {},
+                            width: 20.w,
+                            height: 7.2.h,
+                            text: "-${context.loc.one}${context.loc.eight}%",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 18),
+                            imagePath: "assets/images/btn1.png"),
+                      ),
+                      Bouncing(
+                        onPress: () {},
+                        child: clickableContainer(
+                            onTap: () {},
+                            width: 20.w,
+                            height: 7.2.h,
+                            text: "-GST",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 18),
+                            imagePath: "assets/images/btn1.png"),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Bouncing(
+                        onPress: () {},
+                        child: clickableContainer(
+                            onTap: () {},
+                            width: 20.w,
+                            height: 7.2.h,
+                            text: "GT",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 16),
+                            imagePath: "assets/images/btn2.png"),
+                      ),
+                      Bouncing(
+                        onPress: () {
+                          onclick("√x", "root");
+                        },
+                        child: clickableContainer(
+                            onTap: () {},
+                            width: 20.w,
+                            height: 7.2.h,
+                            text: "√x",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 19),
+                            imagePath: "assets/images/btn2.png"),
+                      ),
+                      Bouncing(
+                        onPress: () {
+                          onclick("%", "%");
+                        },
+                        child: clickableContainer(
+                            onTap: () {},
+                            width: 20.w,
+                            height: 7.2.h,
+                            text: "%",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 20),
+                            imagePath: "assets/images/btn2.png"),
+                      ),
+                      Bouncing(
+                        onPress: () {
+                          onclick("÷", "/");
+                        },
+                        child: clickableContainer(
+                            onTap: () {},
+                            width: 20.w,
+                            height: 7.2.h,
+                            text: "÷",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 24),
+                            imagePath: "assets/images/btn2.png"),
+                      ),
+                      Bouncing(
+                        onPress: () {
+                          onclick("MR", "MR");
+                        },
+                        child: clickableContainer(
+                            onTap: () {},
+                            width: 20.w,
+                            height: 7.2.h,
+                            text: "MR",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 15),
+                            imagePath: "assets/images/btn2.png"),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Bouncing(
+                        onPress: () {
+                          onclick(context.loc.seven, "7");
+                        },
+                        child: clickableContainer(
+                            onTap: () {},
+                            width: 20.w,
+                            height: 7.2.h,
+                            text: "${context.loc.seven}",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 23),
+                            imagePath: "assets/images/btn1.png"),
+                      ),
+                      Bouncing(
+                        onPress: () {
+                          onclick(context.loc.eight, "8");
+                        },
+                        child: clickableContainer(
+                            onTap: () {},
+                            width: 20.w,
+                            height: 7.2.h,
+                            text: "${context.loc.eight}",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 23),
+                            imagePath: "assets/images/btn1.png"),
+                      ),
+                      Bouncing(
+                        onPress: () {
+                          onclick(context.loc.nine, "9");
+                        },
+                        child: clickableContainer(
+                            onTap: () {},
+                            width: 20.w,
+                            height: 7.2.h,
+                            text: "${context.loc.nine}",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 23),
+                            imagePath: "assets/images/btn1.png"),
+                      ),
+                      Bouncing(
+                        onPress: () {
+                          onclick("×", "*");
+                        },
+                        child: clickableContainer(
+                            onTap: () {},
+                            width: 20.w,
+                            height: 7.2.h,
+                            text: "×",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 24),
+                            imagePath: "assets/images/btn2.png"),
+                      ),
+                      Bouncing(
+                        onPress: () {},
+                        child: clickableContainer(
+                            onTap: () {},
+                            width: 20.w,
+                            height: 7.2.h,
+                            text: "MU",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 15),
+                            imagePath: "assets/images/btn2.png"),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Bouncing(
+                        onPress: () {
+                          onclick(context.loc.four, "4");
+                        },
+                        child: clickableContainer(
+                            onTap: () {},
+                            width: 20.w,
+                            height: 7.2.h,
+                            text: "${context.loc.four}",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 23),
+                            imagePath: "assets/images/btn1.png"),
+                      ),
+                      Bouncing(
+                        onPress: () {
+                          onclick(context.loc.five, "5");
+                        },
+                        child: clickableContainer(
+                            onTap: () {},
+                            width: 20.w,
+                            height: 7.2.h,
+                            text: "${context.loc.five}",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 23),
+                            imagePath: "assets/images/btn1.png"),
+                      ),
+                      Bouncing(
+                        onPress: () {
+                          onclick(context.loc.six, "6");
+                        },
+                        child: clickableContainer(
+                            onTap: () {},
+                            width: 20.w,
+                            height: 7.2.h,
+                            text: "${context.loc.six}",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 23),
+                            imagePath: "assets/images/btn1.png"),
+                      ),
+                      Bouncing(
+                        onPress: () {
+                          onclick("-", "-");
+                        },
+                        child: clickableContainer(
+                            onTap: () {},
+                            width: 20.w,
+                            height: 7.2.h,
+                            text: "-",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 25),
+                            imagePath: "assets/images/btn2.png"),
+                      ),
+                      Bouncing(
+                        onPress: () {
+                          onclick("M-", "M-");
+                        },
+                        child: clickableContainer(
+                            onTap: () {},
+                            width: 20.w,
+                            height: 7.2.h,
+                            text: "M-",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 15),
+                            imagePath: "assets/images/btn2.png"),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(
+                        children: [
+                          Bouncing(
+                            onPress: () {
+                              onclick(context.loc.one, "1");
+                            },
+                            child: clickableContainer(
+                                onTap: () {},
+                                width: 20.w,
+                                height: 7.2.h,
+                                text: "${context.loc.one}",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 23),
+                                imagePath: "assets/images/btn1.png"),
+                          ),
+                          Bouncing(
+                            onPress: () {
+                              onclick(context.loc.zero, "0");
+                            },
+                            child: clickableContainer(
+                                onTap: () {},
+                                width: 20.w,
+                                height: 7.2.h,
+                                text: "${context.loc.zero}",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 23),
+                                imagePath: "assets/images/btn1.png"),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Bouncing(
+                            onPress: () {
+                              onclick(context.loc.two, "2");
+                            },
+                            child: clickableContainer(
+                                onTap: () {},
+                                width: 20.w,
+                                height: 7.2.h,
+                                text: "${context.loc.two}",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 23),
+                                imagePath: "assets/images/btn1.png"),
+                          ),
+                          Bouncing(
+                            onPress: () {
+                              onclick(context.loc.zero1, "00");
+                            },
+                            child: clickableContainer(
+                                onTap: () {},
+                                width: 20.w,
+                                height: 7.2.h,
+                                text: "${context.loc.zero1}",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 23),
+                                imagePath: "assets/images/btn1.png"),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          Bouncing(
+                            onPress: () {
+                              onclick(context.loc.three, "3");
+                            },
+                            child: clickableContainer(
+                                onTap: () {},
+                                width: 20.w,
+                                height: 7.2.h,
+                                text: "${context.loc.three}",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 23),
+                                imagePath: "assets/images/btn1.png"),
+                          ),
+                          Bouncing(
+                            onPress: () {
+                              onclick(".", ".");
+                            },
+                            child: clickableContainer(
+                                onTap: () {},
+                                width: 20.w,
+                                height: 7.2.h,
+                                text: ".",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 23),
+                                imagePath: "assets/images/btn1.png"),
+                          ),
+                        ],
+                      ),
+                      Bouncing(
+                        onPress: () {
+                          onclick("+", "+");
+                        },
+                        child: clickableContainer(
+                            onTap: () {},
+                            width: 20.w,
+                            height: 14.4.h,
+                            text: "+",
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500,
+                                fontSize: 25),
+                            imagePath: "assets/images/btn3.png"),
+                      ),
+                      Column(
+                        children: [
+                          Bouncing(
+                            onPress: () {
+                              onclick("M+", "M+");
+                            },
+                            child: clickableContainer(
+                                onTap: () {},
+                                width: 20.w,
+                                height: 7.2.h,
+                                text: "M+",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 15),
+                                imagePath: "assets/images/btn2.png"),
+                          ),
+                          Bouncing(
+                            onPress: () {
+                              onclick("=", "=");
+                            },
+                            child: clickableContainer(
+                                onTap: () {},
+                                width: 20.w,
+                                height: height,
+                                text: "=",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 20),
+                                imagePath: "assets/images/btn4.png"),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  double height = 7.2.h; // Initial height of the box
+
+  void _startBounceAnimation() {
+    setState(() {
+      height = 6.5.h; // Set the target height for the bounce animation
+    });
+
+    Future.delayed(Duration(milliseconds: 1), () {
+      setState(() {
+        height = 7.2.h; // Reset the height after the bounce animation
+      });
+    });
+  }
+
+  Widget clickableContainer({
+    VoidCallback? onTap,
+    double? height,
+    double? width,
+    String? imagePath,
+    String? text,
+    TextStyle? style,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        height: height,
+        width: width,
+        decoration: BoxDecoration(
+          color: Colors.grey,
+          image: DecorationImage(
+            image: AssetImage(imagePath!),
+            fit: BoxFit.fill,
+          ),
+        ),
+        child: Center(
+          child: Text(
+            text!,
+            style: style,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class LenguageSelectionBottomSheet extends StatefulWidget {
+  const LenguageSelectionBottomSheet({super.key});
+
+  @override
+  State<LenguageSelectionBottomSheet> createState() =>
+      _LenguageSelectionBottomSheetState();
+}
+
+class _LenguageSelectionBottomSheetState
+    extends State<LenguageSelectionBottomSheet> {
+  Calculator_Controller controller = Get.find();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        height: 52.h,
+        decoration: BoxDecoration(
+          color: Colors.black.withOpacity(0.5),
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+        ),
+        child: Column(crossAxisAlignment: CrossAxisAlignment.end, children: [
+          Padding(
+            padding: EdgeInsets.only(top: 15, bottom: 15, right: 30),
+            child: InkWell(
+              onTap: () {
+                Navigator.pop(context);
+              },
+              child: Container(
+                height: 4.h,
+                width: 8.7.w,
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.2),
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Icon(
+                  Icons.close,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+          Expanded(
+            child: Obx(
+              () => GridView.builder(
+                itemCount: controller.lang.value.length,
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 4, childAspectRatio: 1.0),
+                itemBuilder: (context, index) {
+                  return Container(
+                    margin: EdgeInsets.symmetric(vertical: 5, horizontal: 5),
+                    decoration: BoxDecoration(
+                        border: controller.lang.value[index].isselect == true
+                            ? Border.all(color: Colors.white)
+                            : Border.all(color: Colors.black),
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.white.withOpacity(0.1)),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        InkWell(
+                          onTap: () async {
+                            for (int i = 0;
+                                i < controller.lang.value.length;
+                                i++) {
+                              controller.lang.value[i].isselect = false;
+                            }
+                            controller.lang.value[index].isselect = true;
+                            setState(() {});
+
+                            Locale _locale = await setLocale(
+                                controller.lang.value[index].languageCode!);
+                            MyApp.setLocale(context, _locale);
+
+                            Get.back();
+                          },
+                          child: Container(
+                            height: 40,
+                            width: 60,
+                            child: Center(
+                              child: Text(
+                                "${controller.lang.value[index].flag}",
+                                style: TextStyle(fontSize: 20),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "${controller.lang.value[index].name}",
+                              style: TextStyle(
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+          )
+        ]));
+  }
+}
+
 gallery_app
 
 import 'package:flutter/cupertino.dart';
